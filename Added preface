@@ -1,0 +1,88 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "mount_file_id": "1751Ng9vctM8t2t_KYCBMbRYlKFECJX6F",
+      "authorship_tag": "ABX9TyMy7RgrLQnPmu8KUpY1Ou49",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/dvansoye/FormatNote/blob/main/Added%20preface\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "ojfktaERecha"
+      },
+      "outputs": [],
+      "source": [
+        "def reformat_text(input_file, output_file):\n",
+        "    # Read the file\n",
+        "    with open(input_file, 'r') as file:\n",
+        "        lines = file.readlines()\n",
+        "\n",
+        "    formatted_lines = []\n",
+        "    for line in lines:\n",
+        "        # Strip line of trailing spaces, commas and newline characters for consistent manipulations\n",
+        "        line = line.strip(' \\n,')\n",
+        "\n",
+        "        # If the line is blank, skip the formatting rules\n",
+        "        if len(line) == 0 or line.startswith('Tags:') or line.startswith('Review dates:') or line.startswith('- [ ]') or line.startswith('!') or line.startswith('#'):\n",
+        "            formatted_lines.append(line)\n",
+        "            continue\n",
+        "\n",
+        "        # Capitalize the first character of the buffer\n",
+        "        if len(line) > 0 and line[0].islower():\n",
+        "            line = line[0].upper() + line[1:]\n",
+        "\n",
+        "        # If the buffer starts with a digit\n",
+        "        if line[0].isdigit():\n",
+        "            line = '# Chapter ' + line\n",
+        "            formatted_lines.append(line)\n",
+        "            continue\n",
+        "\n",
+        "        # If the buffer starts with the string \"Chapter\"\n",
+        "        temp = line.lower()\n",
+        "        if temp.startswith('chapter') or temp.startswith('preface') or temp.startswith('introduction') or temp.startswith('conclusion') or temp.startswith('epilogue'):\n",
+        "            line = '# ' + line\n",
+        "            formatted_lines.append(line)\n",
+        "            continue\n",
+        "\n",
+        "        # Add a period to the buffer if it doesn't exist.\n",
+        "        if (not line.endswith('.')) and (not line.endswith('\\\"')) and (not line.endswith('\\u201d')):\n",
+        "            line += '.'\n",
+        "\n",
+        "        formatted_lines.append(line)\n",
+        "\n",
+        "     # Write the file\n",
+        "    with open(output_file, 'w') as file:\n",
+        "        for line in formatted_lines:\n",
+        "          file.writelines(line + '\\n')\n",
+        "\n",
+        "\n",
+        "input = '/content/drive/MyDrive/Colab Notebooks/FormatNoteData/input.txt'\n",
+        "output = '/content/drive/MyDrive/Colab Notebooks/FormatNoteData/output.txt'\n",
+        "reformat_text(input, output)"
+      ]
+    }
+  ]
+}
